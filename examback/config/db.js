@@ -1,11 +1,19 @@
-var mongoose= require("mongoose")
-var dotenv = require("dotenv")
-dotenv.config()
+var mongoose = require("mongoose");
+var dotenv = require("dotenv");
 
-var cn = mongoose.connect(process.env.DBURL).then(res=>{
-    console.log("connected to database")
-}).catch(err => {
-    console.log(err)
+dotenv.config();
+
+console.log("DBURL EXISTS:", !!process.env.DBURL);
+
+mongoose.connect(process.env.DBURL, {
+    serverSelectionTimeoutMS: 10000
 })
-module.exports = cn
- 
+.then(() => {
+    console.log("CONNECTED TO ATLAS DATABASE");
+})
+.catch((err) => {
+    console.log("DATABASE CONNECTION ERROR:");
+    console.log(err);
+});
+
+module.exports = mongoose.connection;
